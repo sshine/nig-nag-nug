@@ -1,0 +1,23 @@
+name:        nik-nak-nok
+version:     0.1.0.0
+
+synopsis:    'nik-nak-nok'
+description: 'nik-nak-nok'
+category:    Games
+license:     MIT
+
+homepage:    https://github.com/sshine/nik-nak-nok
+author:      Simon Shine
+maintainer:  shreddedglory@gmail.com
+copyright:   2020 Simon Shine
+
+extra-source-files:
+  - README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - containers
+  - QuickCheck
+
+library:
+  source-dirs: src
