@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f1c185d39c07d020915c534b547c95815a72cfd4567e2525b14c72a13fa8ae87
+-- hash: d45a0a7270a74530e7d18e4e922cb5b383718b15c3a65a2b1c4db044ec5881b7
 
 name:           nig-nag-nug
 version:        0.1.0.0
@@ -23,7 +23,7 @@ extra-source-files:
 
 library
   exposed-modules:
-      NikNakNok
+      NigNagNug
   other-modules:
       Paths_nig_nag_nug
   hs-source-dirs:
