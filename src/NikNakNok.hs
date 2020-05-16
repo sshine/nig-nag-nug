@@ -18,7 +18,7 @@ compareHands (Hand a) (Hand b)
   | otherwise  = LT
 
 points :: Hand -> Int
-points (Hand 2) = 2
+points (Hand 1) = 2
 points (Hand _) = 1
 
 winner :: (Hand, Hand) -> [(Hand, Int)]
