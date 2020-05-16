@@ -1,12 +1,12 @@
-name:        nik-nak-nok
+name:        nig-nag-nug
 version:     0.1.0.0
 
-synopsis:    'nik-nak-nok'
-description: 'nik-nak-nok'
+synopsis:    'nig-nag-nug'
+description: 'nig-nag-nug'
 category:    Games
 license:     MIT
 
-homepage:    https://github.com/sshine/nik-nak-nok
+homepage:    https://github.com/sshine/nig-nag-nug
 author:      Simon Shine
 maintainer:  shreddedglory@gmail.com
 copyright:   2020 Simon Shine

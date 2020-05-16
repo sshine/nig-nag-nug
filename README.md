@@ -1,4 +1,4 @@
-# nik-nak-nok
+# nig-nag-nug
 
 Rules:
 
