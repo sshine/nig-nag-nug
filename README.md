@@ -28,8 +28,8 @@ And hand 1 scores two points if it wins.
 
 ```
 $ stack ghci
-λ> generate (uniformGameGen 100000)
-fromList [(Hand 1,31196),(Hand 2,50096),(Hand 3,12429),(Hand 4,6217)]
+λ> QC.generate (uniformGameGen 100000)
+fromList [(Hand 1,62482),(Hand 2,25006),(Hand 3,12342),(Hand 4,6232)]
 ```
 
 It seems that picking hand 2 gives the most points when playing against a
