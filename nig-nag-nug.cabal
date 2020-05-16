@@ -4,14 +4,14 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bb2c080d85b64c41a91c547ed551f2b6d575beaf943c6f40994d1bc416dbfa0a
+-- hash: f1c185d39c07d020915c534b547c95815a72cfd4567e2525b14c72a13fa8ae87
 
-name:           nik-nak-nok
+name:           nig-nag-nug
 version:        0.1.0.0
-synopsis:       nik-nak-nok
-description:    nik-nak-nok
+synopsis:       nig-nag-nug
+description:    nig-nag-nug
 category:       Games
-homepage:       https://github.com/sshine/nik-nak-nok
+homepage:       https://github.com/sshine/nig-nag-nug
 author:         Simon Shine
 maintainer:     shreddedglory@gmail.com
 copyright:      2020 Simon Shine
@@ -25,7 +25,7 @@ library
   exposed-modules:
       NikNakNok
   other-modules:
-      Paths_nik_nak_nok
+      Paths_nig_nag_nug
   hs-source-dirs:
       src
   build-depends:
