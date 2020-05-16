@@ -3,7 +3,9 @@ module NikNakNok where
 
 import Data.Map (Map)
 import qualified Data.Map as Map
-import Test.QuickCheck
+
+import Test.QuickCheck (Gen)
+import qualified Test.QuickCheck as QC
 
 newtype Hand = Hand Int
   deriving (Eq, Ord, Show)
@@ -27,16 +29,41 @@ winner (hand1, hand2) = case compareHands hand1 hand2 of
   LT -> [(hand1, points hand1)]
   EQ -> []
 
--- Generator
+-- Uniform strategy
 
-choiceGen :: Gen Hand
-choiceGen = Hand <$> elements [1..4]
+uniformHandGen :: Gen Hand
+uniformHandGen = Hand <$> QC.elements [1..4]
 
-pairGen :: Gen (Hand, Hand)
-pairGen = (,) <$> choiceGen <*> choiceGen
+pairGen :: Gen a -> Gen b -> Gen (a, b)
+pairGen aGen bGen = (,) <$> aGen <*> bGen
+
+uniformMatchGen :: Gen (Hand, Hand)
+uniformMatchGen = pairGen uniformHandGen uniformHandGen
 
 uniformGameGen :: Int -> Gen (Map Hand Int)
 uniformGameGen n = do
-  games <- vectorOf n pairGen
+  games <- QC.vectorOf n uniformMatchGen
   let wins = concatMap winner games
   pure (Map.fromListWith (+) wins)
+
+-- Fixed frequency strategy
+
+frequencyMapGen :: Ord a => Map a Int -> Gen a
+frequencyMapGen = QC.frequency . map gen . Map.toList
+  where
+    gen :: (a, Int) -> (Int, Gen a)
+    gen (hand, score) = (score, pure hand)
+
+frequencyHandGen :: Map Hand Int -> Gen Hand
+frequencyHandGen = frequencyMapGen
+
+-- Multi-strategy tournament
+
+oneHandGen :: Gen Hand
+oneHandGen = uniformGameGen 10000 >>= frequencyHandGen
+
+newtype Player = Player Int
+  deriving (Eq, Ord, Show)
+
+tournament :: Int -> Map Player (Gen Hand) -> Gen (Map Player Int)
+tournament n competitors = undefined
