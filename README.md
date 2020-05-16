@@ -32,4 +32,9 @@ $ stack ghci
 fromList [(Hand 1,31196),(Hand 2,50096),(Hand 3,12429),(Hand 4,6217)]
 ```
 
-What if the next iteration of strategies assumes a distribution based on the first uniform strategy?
+It seems that picking hand 2 gives the most points when playing against a
+uniformly random player in spite of losing more games.
+
+What if the next generation of strategies assumes a discrete distribution based
+on how many points the first uniform strategy scores? How well would this perform
+against the uniform strategy and itself?
