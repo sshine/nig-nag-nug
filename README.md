@@ -24,8 +24,6 @@ Both hands 4 and 3 beat two other hands and lose to one hand.
 
 Both hands 2 and 1 beat one other hand and lose to two hands.
 
-And hand 1 scores two points if it wins.
-
 ### But what hand scores the most points?
 
 ```
