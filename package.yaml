@@ -21,3 +21,10 @@ dependencies:
 
 library:
   source-dirs: src
+
+tests:
+  test:
+    main: test/Main.hs
+    dependencies:
+      - nig-nag-nug
+      - hspec

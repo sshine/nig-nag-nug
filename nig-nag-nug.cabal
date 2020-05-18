@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d45a0a7270a74530e7d18e4e922cb5b383718b15c3a65a2b1c4db044ec5881b7
+-- hash: 20c5964adeea0dcde44ae8ba66137c536316cb9a0b8e3f9bd044388afc51aef2
 
 name:           nig-nag-nug
 version:        0.1.0.0
@@ -32,4 +32,17 @@ library
       QuickCheck
     , base >=4.7 && <5
     , containers
+  default-language: Haskell2010
+
+test-suite test
+  type: exitcode-stdio-1.0
+  main-is: test/Main.hs
+  other-modules:
+      Paths_nig_nag_nug
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , containers
+    , hspec
+    , nig-nag-nug
   default-language: Haskell2010

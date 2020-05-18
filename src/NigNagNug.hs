@@ -15,6 +15,7 @@ newtype Hand = Hand Int
 compareHands :: Hand -> Hand -> Ordering
 compareHands (Hand a) (Hand b)
   | a == b     = EQ
+  | a - 1 == b = LT
   | a + 1 == b = GT
   | a > b      = GT
   | otherwise  = LT

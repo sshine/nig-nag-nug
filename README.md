@@ -1,13 +1,15 @@
-# nig-nag-nug
+# Rock-Spock
 
-## Rules
+A collection of small programs related to Rock-Paper-Scissors.
+
+## "nig-nag-nug"
 
  - Each player chooses value 1-4.
  - Choosing value just below opponent wins.
  - Otherwise, choosing highest value wins.
  - Choosing "1" gives you two points.
 
-## What's the better strategy in this game?
+### What's the better strategy in this game?
 
 It depends on the opponent, but assuming everyone plays uniformly random?
 
@@ -24,15 +26,15 @@ Both hands 2 and 1 beat one other hand and lose to two hands.
 
 And hand 1 scores two points if it wins.
 
-## But what hand scores the most points?
+### But what hand scores the most points?
 
 ```
 $ stack ghci
 λ> QC.generate (uniformGameGen 100000)
-fromList [(Hand 1,62482),(Hand 2,25006),(Hand 3,12342),(Hand 4,6232)]
+fromList [(Hand 1,49744),(Hand 2,25064),(Hand 3,12544),(Hand 4,12513)]
 ```
 
-It seems that picking hand 2 gives the most points when playing against a
+It seems that picking hand 1 gives the most points when playing against a
 uniformly random player in spite of losing more games.
 
 What if the next generation of strategies assumes a discrete distribution based
