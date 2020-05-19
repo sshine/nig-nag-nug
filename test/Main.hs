@@ -1,27 +1,14 @@
 
 module Main where
 
-import Test.Hspec
+import qualified Data.Map as Map
+import           Test.Hspec
+import           Test.QuickCheck
 
-import NigNagNug
+import           NigNagNug
 
 main :: IO ()
 main = hspec specs
-
---shouldBeat :: Hand -> Hand -> Expectation
-shouldBeat hand1 hand2 =
-  it (show hand1 <> " `compareHands` " <> show hand2) $
-    (hand1 `compareHands` hand2) `shouldBe` GT
-
---shouldTieWith :: Hand -> Hand -> Expectation
-shouldTieWith hand1 hand2 =
-  it (show hand1 <> " `compareHands` " <> show hand2) $
-    (hand1 `compareHands` hand2) `shouldBe` EQ
-
---shouldLoseTo :: Hand -> Hand -> Expectation
-shouldLoseTo hand1 hand2 =
-  it (show hand1 <> " `compareHands` " <> show hand2) $
-    (hand1 `compareHands` hand2) `shouldBe` LT
 
 specs :: Spec
 specs = do
@@ -49,3 +36,35 @@ specs = do
       Hand 4 `shouldBeat` Hand 2
       Hand 4 `shouldLoseTo` Hand 3
       Hand 4 `shouldTieWith` Hand 4
+
+  describe "decideWinners" $ do
+    it "has no winners with no players" $
+      decideWinners [] `shouldBe` Map.empty
+
+    it "picks the best hand with two players" $
+      property $
+        forAll uniformHandGen $ \hand1 ->
+        forAll uniformHandGen $ \hand2 -> do
+          let competitors =
+                [ (Player 1, hand1), (Player 2, hand2) ]
+
+          let expected = case compareHands hand1 hand2 of
+                GT -> [(Player 1, points hand1)]
+                LT -> [(Player 2, points hand2)]
+                EQ -> []
+
+          decideWinners competitors === Map.fromList expected
+
+-- Unit-test helpers
+
+shouldBeat hand1 hand2 =
+  it (show hand1 <> " `compareHands` " <> show hand2) $
+    (hand1 `compareHands` hand2) `shouldBe` GT
+
+shouldTieWith hand1 hand2 =
+  it (show hand1 <> " `compareHands` " <> show hand2) $
+    (hand1 `compareHands` hand2) `shouldBe` EQ
+
+shouldLoseTo hand1 hand2 =
+  it (show hand1 <> " `compareHands` " <> show hand2) $
+    (hand1 `compareHands` hand2) `shouldBe` LT

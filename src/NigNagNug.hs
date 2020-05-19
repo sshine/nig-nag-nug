@@ -1,10 +1,14 @@
+{-# LANGUAGE TupleSections #-}
 
 module NigNagNug where
 
-import Data.Map (Map)
+import           Control.Arrow (second)
+import           Control.Monad (replicateM)
+import           Data.List (maximumBy)
+import           Data.Map (Map)
 import qualified Data.Map as Map
-
-import Test.QuickCheck (Gen)
+import           Data.Ord (comparing)
+import           Test.QuickCheck (Gen)
 import qualified Test.QuickCheck as QC
 
 newtype Hand = Hand Int
@@ -24,11 +28,9 @@ points :: Hand -> Int
 points (Hand 1) = 2
 points (Hand _) = 1
 
-winner :: (Hand, Hand) -> [(Hand, Int)]
-winner (hand1, hand2) = case compareHands hand1 hand2 of
-  GT -> [(hand2, points hand2)]
-  LT -> [(hand1, points hand1)]
-  EQ -> []
+beats :: Hand -> Hand -> Bool
+beats hand1 hand2 =
+  compareHands hand1 hand2 == GT
 
 -- Uniform strategy
 
@@ -46,6 +48,12 @@ uniformGameGen n = do
   games <- QC.vectorOf n uniformMatchGen
   let wins = concatMap winner games
   pure (Map.fromListWith (+) wins)
+  where
+    winner :: (Hand, Hand) -> [(Hand, Int)]
+    winner (hand1, hand2) = case compareHands hand1 hand2 of
+      GT -> [(hand2, points hand2)]
+      LT -> [(hand1, points hand1)]
+      EQ -> []
 
 -- Fixed frequency strategy
 
@@ -55,16 +63,39 @@ frequencyMapGen = QC.frequency . map gen . Map.toList
     gen :: (a, Int) -> (Int, Gen a)
     gen (hand, score) = (score, pure hand)
 
-frequencyHandGen :: Map Hand Int -> Gen Hand
-frequencyHandGen = frequencyMapGen
-
 -- Multi-strategy tournament
-
-oneHandGen :: Gen Hand
-oneHandGen = uniformGameGen 10000 >>= frequencyHandGen
 
 newtype Player = Player Int
   deriving (Eq, Ord, Show)
 
+simple :: Map Player (Gen Hand)
+simple = Map.fromList
+  [ (Player 1, uniformHandGen)
+  , (Player 2, uniformGameGen 10000 >>= frequencyMapGen)
+  ]
+
 tournament :: Int -> Map Player (Gen Hand) -> Gen (Map Player Int)
-tournament n competitors = undefined
+tournament n = fmap (Map.unionsWith (+)) . replicateM n . roundM
+
+roundM :: Map Player (Gen Hand) -> Gen (Map Player Int)
+roundM = fmap decideWinners . traverse go . Map.assocs
+  where
+    go :: (Player, Gen Hand) -> Gen (Player, Hand)
+    go (player, handGen) = fmap (player,) handGen
+
+decideWinners :: [(Player, Hand)] -> Map Player Int
+decideWinners outcomes =
+  Map.fromListWith (+) $
+  map (second points) $
+  filter isWinner outcomes
+  where
+    isWinner :: (Player, Hand) -> Bool
+    isWinner (player, hand) =
+      any (isBetter hand) outcomes &&
+      all (not . isWorse hand) outcomes
+
+    isBetter :: Hand -> (Player, Hand) -> Bool
+    isBetter hand1 (_, hand2) = hand1 `beats` hand2
+
+    isWorse :: Hand -> (Player, Hand) -> Bool
+    isWorse hand1 (_, hand2) = hand2 `beats` hand1
